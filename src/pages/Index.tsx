@@ -7,8 +7,11 @@ import ThankYou from "@/components/ThankYou";
 
 interface Post {
   id: string;
-  image: string;
+  instagram_id: string;
   title: string;
+  image_url: string;
+  caption: string;
+  permalink: string;
 }
 
 type PageState = "intro" | "selection" | "reflection" | "thankyou";
@@ -39,9 +42,8 @@ const Index = () => {
     setCurrentPage("reflection");
   };
 
-  const handleReflectionSubmit = (reflection: string) => {
-    // Here you would typically save the reflection to a database
-    console.log("Reflection submitted:", { reflection, post: selectedPost });
+  const handleReflectionSubmit = () => {
+    // Reflection is now saved via the ReflectionForm component
     setCurrentPage("thankyou");
   };
 

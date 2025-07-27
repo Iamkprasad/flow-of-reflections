@@ -3,16 +3,20 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { useRealtimeReflections } from "@/hooks/useRealtimeReflections";
 
 interface Post {
   id: string;
-  image: string;
+  instagram_id: string;
   title: string;
+  image_url: string;
+  caption: string;
+  permalink: string;
 }
 
 interface ReflectionFormProps {
   selectedPost: Post;
-  onSubmit: (reflection: string) => void;
+  onSubmit: () => void;
   onBack: () => void;
 }
 
@@ -20,6 +24,7 @@ const ReflectionForm = ({ selectedPost, onSubmit, onBack }: ReflectionFormProps)
   const [reflection, setReflection] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const { addReflection } = useRealtimeReflections();
 
   const handleSubmit = async () => {
     if (!reflection.trim()) {
@@ -33,11 +38,27 @@ const ReflectionForm = ({ selectedPost, onSubmit, onBack }: ReflectionFormProps)
 
     setIsSubmitting(true);
     
-    // Simulate submission
-    setTimeout(() => {
-      onSubmit(reflection);
+    try {
+      const result = await addReflection(selectedPost.id, reflection.trim());
+      
+      if (result.success) {
+        toast({
+          title: "Reflection shared",
+          description: "Your reflection has been shared with the community.",
+        });
+        onSubmit();
+      } else {
+        throw new Error("Failed to save reflection");
+      }
+    } catch (error) {
+      toast({
+        title: "Error sharing reflection",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -56,7 +77,7 @@ const ReflectionForm = ({ selectedPost, onSubmit, onBack }: ReflectionFormProps)
         <Card className="overflow-hidden bg-gradient-card border-border/50 shadow-soft">
           <div className="aspect-square">
             <img
-              src={selectedPost.image}
+              src={selectedPost.image_url}
               alt={selectedPost.title}
               className="w-full h-full object-cover"
             />
