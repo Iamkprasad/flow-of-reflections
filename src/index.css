@@ -8,33 +8,47 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Spiritual color palette */
+    --background: 38 20% 97%;  /* Warm ivory */
+    --foreground: 25 15% 25%;  /* Deep warm brown */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 40 30% 98%;        /* Soft cream */
+    --card-foreground: 25 15% 25%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 40 30% 98%;
+    --popover-foreground: 25 15% 25%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 38 65% 55%;     /* Golden amber */
+    --primary-foreground: 40 30% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 45 40% 90%;   /* Warm beige */
+    --secondary-foreground: 25 15% 25%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 50 25% 92%;       /* Soft sage */
+    --muted-foreground: 25 10% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 35 70% 65%;      /* Warm gold */
+    --accent-foreground: 40 30% 98%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 45 20% 88%;      /* Soft warm border */
+    --input: 45 25% 95%;       /* Light input background */
+    --ring: 38 65% 55%;        /* Golden ring */
+
+    /* Spiritual gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(38 65% 55%), hsl(35 70% 65%));
+    --gradient-card: linear-gradient(180deg, hsl(40 30% 98%), hsl(45 25% 96%));
+    --gradient-background: linear-gradient(180deg, hsl(38 20% 97%), hsl(45 15% 95%));
+    
+    /* Spiritual glows */
+    --glow-primary: 0 0 30px hsl(38 65% 55% / 0.3);
+    --glow-soft: 0 0 20px hsl(35 70% 65% / 0.2);
+    
+    /* Spiritual shadows */
+    --shadow-soft: 0 4px 20px hsl(25 15% 25% / 0.1);
+    --shadow-glow: 0 0 40px hsl(38 65% 55% / 0.15);
 
     --radius: 0.5rem;
 
@@ -56,33 +70,47 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Dark spiritual theme */
+    --background: 25 20% 8%;   /* Deep warm black */
+    --foreground: 40 30% 92%;  /* Warm white */
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 25 25% 12%;        /* Dark warm card */
+    --card-foreground: 40 30% 92%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 25 25% 12%;
+    --popover-foreground: 40 30% 92%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 38 65% 55%;     /* Golden amber (same) */
+    --primary-foreground: 25 20% 8%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 25 30% 15%;   /* Dark warm secondary */
+    --secondary-foreground: 40 30% 92%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 25 25% 18%;       /* Dark muted */
+    --muted-foreground: 45 15% 65%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 35 70% 65%;      /* Warm gold (same) */
+    --accent-foreground: 25 20% 8%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --border: 25 25% 20%;      /* Dark warm border */
+    --input: 25 25% 15%;       /* Dark input */
+    --ring: 38 65% 55%;        /* Golden ring */
+
+    /* Dark spiritual gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(38 65% 55%), hsl(35 70% 65%));
+    --gradient-card: linear-gradient(180deg, hsl(25 25% 12%), hsl(25 30% 10%));
+    --gradient-background: linear-gradient(180deg, hsl(25 20% 8%), hsl(25 25% 6%));
+    
+    /* Dark spiritual glows */
+    --glow-primary: 0 0 40px hsl(38 65% 55% / 0.4);
+    --glow-soft: 0 0 30px hsl(35 70% 65% / 0.3);
+    
+    /* Dark spiritual shadows */
+    --shadow-soft: 0 4px 20px hsl(0 0% 0% / 0.3);
+    --shadow-glow: 0 0 50px hsl(38 65% 55% / 0.2);
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
