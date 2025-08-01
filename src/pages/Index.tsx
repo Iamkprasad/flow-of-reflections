@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import ArtReveal from "@/components/ArtReveal";
+import ArtworkSelection from "@/components/ArtworkSelection";
 import ReflectionForm from "@/components/ReflectionForm";
 import ThankYou from "@/components/ThankYou";
 import { useSpiritualArt } from "@/hooks/useSpiritualArt";
@@ -14,22 +15,35 @@ interface SpiritualArt {
   imageUrl: string;
 }
 
-type PageState = "landing" | "generating" | "reveal" | "reflection" | "thankyou";
+type PageState = "landing" | "generating" | "selection" | "reveal" | "reflection" | "thankyou";
 
 const Index = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState<PageState>("landing");
   const [currentArt, setCurrentArt] = useState<SpiritualArt | null>(null);
-  const { generateArt, isGenerating } = useSpiritualArt();
+  const [availableArtworks, setAvailableArtworks] = useState<SpiritualArt[]>([]);
+  const { generateTwoArtworks, isGenerating } = useSpiritualArt();
 
   const handleBeginJourney = async () => {
     setCurrentPage("generating");
-    const art = await generateArt();
-    if (art) {
-      setCurrentArt(art);
-      setCurrentPage("reveal");
+    const artworks = await generateTwoArtworks();
+    if (artworks && artworks.length === 2) {
+      setAvailableArtworks(artworks);
+      setCurrentPage("selection");
     } else {
       setCurrentPage("landing");
+    }
+  };
+
+  const handleArtworkSelected = (art: SpiritualArt) => {
+    setCurrentArt(art);
+    setCurrentPage("reveal");
+  };
+
+  const handleRefreshArtworks = async () => {
+    const artworks = await generateTwoArtworks();
+    if (artworks && artworks.length === 2) {
+      setAvailableArtworks(artworks);
     }
   };
 
@@ -43,6 +57,7 @@ const Index = () => {
 
   const handleStartOver = () => {
     setCurrentArt(null);
+    setAvailableArtworks([]);
     setCurrentPage("landing");
   };
 
@@ -93,10 +108,20 @@ const Index = () => {
           </div>
         )}
         
+        {currentPage === "selection" && (
+          <ArtworkSelection 
+            artworks={availableArtworks}
+            onArtworkSelected={handleArtworkSelected}
+            onRefresh={handleRefreshArtworks}
+            isRefreshing={isGenerating}
+          />
+        )}
+        
         {currentPage === "reveal" && currentArt && (
           <ArtReveal 
             art={currentArt} 
             onStartReflection={handleStartReflection}
+            onBack={() => setCurrentPage("selection")}
           />
         )}
         

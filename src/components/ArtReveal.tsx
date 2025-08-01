@@ -11,9 +11,10 @@ interface SpiritualArt {
 interface ArtRevealProps {
   art: SpiritualArt;
   onStartReflection: () => void;
+  onBack?: () => void;
 }
 
-const ArtReveal = ({ art, onStartReflection }: ArtRevealProps) => {
+const ArtReveal = ({ art, onStartReflection, onBack }: ArtRevealProps) => {
   return (
     <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
       <div className="text-center space-y-4">
@@ -55,13 +56,22 @@ const ArtReveal = ({ art, onStartReflection }: ArtRevealProps) => {
             </div>
           </Card>
 
-          <div className="text-center">
+          <div className="space-y-3">
             <Button
               onClick={onStartReflection}
               className="w-full py-4 bg-gradient-primary hover:shadow-glow transition-all duration-300 font-inter"
             >
               Share Your Reflection
             </Button>
+            {onBack && (
+              <Button
+                onClick={onBack}
+                variant="outline"
+                className="w-full font-inter"
+              >
+                Choose Again
+              </Button>
+            )}
           </div>
         </div>
       </div>
