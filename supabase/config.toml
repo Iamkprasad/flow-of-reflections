@@ -1,4 +1,5 @@
 project_id = "eflqniojksdfnvasdffb"
 
-[functions.fetch-instagram]
+[functions.generate-spiritual-art]
 verify_jwt = false
+environment = { GEMINI_API_KEY = "GEMINI_API_KEY" }

@@ -1,60 +1,49 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import IntroModal from "@/components/IntroModal";
-import PostSelection from "@/components/PostSelection";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import ArtReveal from "@/components/ArtReveal";
 import ReflectionForm from "@/components/ReflectionForm";
 import ThankYou from "@/components/ThankYou";
+import { useSpiritualArt } from "@/hooks/useSpiritualArt";
 
-interface Post {
+interface SpiritualArt {
   id: string;
-  instagram_id: string;
   title: string;
-  image_url: string;
-  caption: string;
-  permalink: string;
+  description: string;
+  imageUrl: string;
 }
 
-type PageState = "intro" | "selection" | "reflection" | "thankyou";
+type PageState = "landing" | "generating" | "reveal" | "reflection" | "thankyou";
 
 const Index = () => {
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState<PageState>("intro");
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-  const [showIntroModal, setShowIntroModal] = useState(true);
+  const [currentPage, setCurrentPage] = useState<PageState>("landing");
+  const [currentArt, setCurrentArt] = useState<SpiritualArt | null>(null);
+  const { generateArt, isGenerating } = useSpiritualArt();
 
-  useEffect(() => {
-    // Auto-show intro modal on first visit
-    const hasVisited = localStorage.getItem("taporuh-visited");
-    if (hasVisited) {
-      setShowIntroModal(false);
-      setCurrentPage("selection");
+  const handleBeginJourney = async () => {
+    setCurrentPage("generating");
+    const art = await generateArt();
+    if (art) {
+      setCurrentArt(art);
+      setCurrentPage("reveal");
+    } else {
+      setCurrentPage("landing");
     }
-  }, []);
-
-  const handleIntroComplete = () => {
-    localStorage.setItem("taporuh-visited", "true");
-    setShowIntroModal(false);
-    setCurrentPage("selection");
   };
 
-  const handlePostSelected = (post: Post) => {
-    setSelectedPost(post);
+  const handleStartReflection = () => {
     setCurrentPage("reflection");
   };
 
   const handleReflectionSubmit = () => {
-    // Reflection is now saved via the ReflectionForm component
     setCurrentPage("thankyou");
   };
 
-  const handleBackToSelection = () => {
-    setSelectedPost(null);
-    setCurrentPage("selection");
-  };
-
   const handleStartOver = () => {
-    setSelectedPost(null);
-    setCurrentPage("selection");
+    setCurrentArt(null);
+    setCurrentPage("landing");
   };
 
   const handleViewReflections = () => {
@@ -63,21 +52,59 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-background">
-      <IntroModal 
-        isOpen={showIntroModal} 
-        onClose={handleIntroComplete} 
-      />
-      
       <div className="container mx-auto px-4 py-12">
-        {currentPage === "selection" && (
-          <PostSelection onPostSelected={handlePostSelected} />
+        {currentPage === "landing" && (
+          <div className="max-w-2xl mx-auto text-center space-y-8 animate-fade-in">
+            <div className="space-y-6">
+              <h1 className="font-cormorant text-5xl font-bold text-foreground leading-tight">
+                Spiritual Art Experience
+              </h1>
+              <p className="font-inter text-lg text-muted-foreground leading-relaxed">
+                Embark on a journey of inner discovery through AI-generated spiritual artwork.
+                Each piece is uniquely created to inspire reflection and connection.
+              </p>
+            </div>
+            
+            <Card className="p-8 bg-gradient-card border-border/50 shadow-spiritual">
+              <Button
+                onClick={handleBeginJourney}
+                className="w-full py-6 text-lg bg-gradient-primary hover:shadow-glow transition-all duration-300 font-inter"
+                disabled={isGenerating}
+              >
+                Begin Journey
+              </Button>
+            </Card>
+          </div>
         )}
         
-        {currentPage === "reflection" && selectedPost && (
+        {currentPage === "generating" && (
+          <div className="max-w-2xl mx-auto text-center space-y-8 animate-fade-in">
+            <div className="animate-float">
+              <div className="w-20 h-20 mx-auto bg-gradient-primary rounded-full flex items-center justify-center shadow-glow mb-6">
+                <span className="text-3xl animate-pulse">✨</span>
+              </div>
+            </div>
+            <h2 className="font-cormorant text-3xl font-semibold text-foreground">
+              Your artwork is manifesting...
+            </h2>
+            <p className="font-inter text-muted-foreground">
+              The universe is creating something beautiful just for you
+            </p>
+          </div>
+        )}
+        
+        {currentPage === "reveal" && currentArt && (
+          <ArtReveal 
+            art={currentArt} 
+            onStartReflection={handleStartReflection}
+          />
+        )}
+        
+        {currentPage === "reflection" && currentArt && (
           <ReflectionForm
-            selectedPost={selectedPost}
+            selectedArt={currentArt}
             onSubmit={handleReflectionSubmit}
-            onBack={handleBackToSelection}
+            onBack={() => setCurrentPage("reveal")}
           />
         )}
         

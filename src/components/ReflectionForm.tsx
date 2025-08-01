@@ -5,22 +5,20 @@ import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useRealtimeReflections } from "@/hooks/useRealtimeReflections";
 
-interface Post {
+interface SpiritualArt {
   id: string;
-  instagram_id: string;
   title: string;
-  image_url: string;
-  caption: string;
-  permalink: string;
+  description: string;
+  imageUrl: string;
 }
 
 interface ReflectionFormProps {
-  selectedPost: Post;
+  selectedArt: SpiritualArt;
   onSubmit: () => void;
   onBack: () => void;
 }
 
-const ReflectionForm = ({ selectedPost, onSubmit, onBack }: ReflectionFormProps) => {
+const ReflectionForm = ({ selectedArt, onSubmit, onBack }: ReflectionFormProps) => {
   const [reflection, setReflection] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -39,7 +37,7 @@ const ReflectionForm = ({ selectedPost, onSubmit, onBack }: ReflectionFormProps)
     setIsSubmitting(true);
     
     try {
-      const result = await addReflection(selectedPost.id, reflection.trim());
+      const result = await addReflection(selectedArt.id, reflection.trim());
       
       if (result.success) {
         toast({
@@ -73,18 +71,18 @@ const ReflectionForm = ({ selectedPost, onSubmit, onBack }: ReflectionFormProps)
       </div>
 
       <div className="grid md:grid-cols-2 gap-8 items-start">
-        {/* Selected Post */}
+        {/* Selected Artwork */}
         <Card className="overflow-hidden bg-gradient-card border-border/50 shadow-soft">
-          <div className="aspect-square">
+          <div className="aspect-square p-4">
             <img
-              src={selectedPost.image_url}
-              alt={selectedPost.title}
-              className="w-full h-full object-cover"
+              src={selectedArt.imageUrl}
+              alt={selectedArt.title}
+              className="w-full h-full object-contain rounded-lg"
             />
           </div>
           <div className="p-4 text-center">
             <h3 className="font-cormorant text-xl font-medium text-foreground">
-              {selectedPost.title}
+              {selectedArt.title}
             </h3>
           </div>
         </Card>
