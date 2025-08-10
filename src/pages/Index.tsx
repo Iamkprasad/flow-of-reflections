@@ -66,27 +66,37 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-background">
+    <div className="min-h-screen bg-gradient-background text-white">
       <div className="container mx-auto px-4 py-12">
         {currentPage === "landing" && (
-          <div className="max-w-2xl mx-auto text-center space-y-8 animate-fade-in">
-            <div className="space-y-6">
-              <h1 className="font-cormorant text-5xl font-bold text-foreground leading-tight">
-                Spiritual Art Experience
+          <div className="max-w-3xl mx-auto text-center space-y-8 animate-fade-in">
+            <div className="space-y-8">
+              <div className="flex justify-center mb-8">
+                <img 
+                  src="/src/assets/taporuh-logo.svg" 
+                  alt="Taporuh - Spiritual Sanctuary" 
+                  className="h-20 w-20 animate-float"
+                />
+              </div>
+              <h1 className="font-playfair text-6xl font-bold text-white leading-tight">
+                Taporuh
               </h1>
-              <p className="font-inter text-lg text-muted-foreground leading-relaxed">
+              <p className="font-opensans text-xl text-blue-200 leading-relaxed">
+                Awaken your soul through words, images, and experiences
+              </p>
+              <p className="font-opensans text-lg text-blue-100 leading-relaxed max-w-2xl mx-auto">
                 Embark on a journey of inner discovery through AI-generated spiritual artwork.
                 Each piece is uniquely created to inspire reflection and connection.
               </p>
             </div>
             
-            <Card className="p-8 bg-gradient-card border-border/50 shadow-spiritual">
+            <Card className="p-8 bg-white/10 backdrop-blur-sm border-accent/30 shadow-spiritual">
               <Button
                 onClick={handleBeginJourney}
-                className="w-full py-6 text-lg bg-gradient-primary hover:shadow-glow transition-all duration-300 font-inter"
+                className="w-full py-6 text-xl bg-accent hover:bg-accent/90 text-primary hover:shadow-glow transition-all duration-300 font-opensans font-semibold"
                 disabled={isGenerating}
               >
-                Begin Journey
+                Begin Your Spiritual Journey
               </Button>
             </Card>
           </div>
@@ -95,15 +105,15 @@ const Index = () => {
         {currentPage === "generating" && (
           <div className="max-w-2xl mx-auto text-center space-y-8 animate-fade-in">
             <div className="animate-float">
-              <div className="w-20 h-20 mx-auto bg-gradient-primary rounded-full flex items-center justify-center shadow-glow mb-6">
-                <span className="text-3xl animate-pulse">✨</span>
+              <div className="w-20 h-20 mx-auto bg-accent/20 backdrop-blur-sm rounded-full flex items-center justify-center shadow-glow mb-6">
+                <span className="text-3xl text-accent animate-pulse">🪷</span>
               </div>
             </div>
-            <h2 className="font-cormorant text-3xl font-semibold text-foreground">
-              Your artwork is manifesting...
+            <h2 className="font-playfair text-4xl font-semibold text-white">
+              Your sacred artwork is manifesting...
             </h2>
-            <p className="font-inter text-muted-foreground">
-              The universe is creating something beautiful just for you
+            <p className="font-opensans text-blue-200 text-lg">
+              The universe is creating something beautiful just for your soul
             </p>
           </div>
         )}

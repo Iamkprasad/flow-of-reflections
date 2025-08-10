@@ -19,8 +19,8 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				'cormorant': ['Cormorant Garamond', 'serif'],
-				'inter': ['Inter', 'sans-serif'],
+				'playfair': ['Playfair Display', 'serif'],
+				'opensans': ['Open Sans', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -71,6 +71,7 @@ export default {
 				'gradient-primary': 'var(--gradient-primary)',
 				'gradient-card': 'var(--gradient-card)',
 				'gradient-background': 'var(--gradient-background)',
+				'gradient-sky': 'var(--gradient-sky)',
 			},
 			boxShadow: {
 				'glow': 'var(--glow-primary)',

@@ -1,54 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Taporuh Brand Design System - All colors MUST be HSL */
 
 @layer base {
   :root {
-    /* Spiritual color palette */
-    --background: 38 20% 97%;  /* Warm ivory */
-    --foreground: 25 15% 25%;  /* Deep warm brown */
+    /* Taporuh Brand Color Palette */
+    --background: 0 0% 100%;        /* Pure White */
+    --foreground: 213 51% 24%;      /* Primary Deep Blue */
 
-    --card: 40 30% 98%;        /* Soft cream */
-    --card-foreground: 25 15% 25%;
+    --card: 0 0% 95%;               /* Meditation Grey */
+    --card-foreground: 213 51% 24%;
 
-    --popover: 40 30% 98%;
-    --popover-foreground: 25 15% 25%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 213 51% 24%;
 
-    --primary: 38 65% 55%;     /* Golden amber */
-    --primary-foreground: 40 30% 98%;
+    --primary: 213 51% 24%;         /* Primary Deep Blue */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 45 40% 90%;   /* Warm beige */
-    --secondary-foreground: 25 15% 25%;
+    --secondary: 213 47% 33%;       /* Secondary Indigo */
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 50 25% 92%;       /* Soft sage */
-    --muted-foreground: 25 10% 45%;
+    --muted: 0 0% 95%;              /* Meditation Grey */
+    --muted-foreground: 213 40% 70%;
 
-    --accent: 35 70% 65%;      /* Warm gold */
-    --accent-foreground: 40 30% 98%;
+    --accent: 45 70% 60%;           /* Lotus Gold Accent */
+    --accent-foreground: 213 51% 24%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 45 20% 88%;      /* Soft warm border */
-    --input: 45 25% 95%;       /* Light input background */
-    --ring: 38 65% 55%;        /* Golden ring */
+    --border: 213 40% 90%;          /* Light Sky border */
+    --input: 0 0% 98%;              /* Very light input */
+    --ring: 45 70% 60%;             /* Lotus Gold ring */
 
-    /* Spiritual gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(38 65% 55%), hsl(35 70% 65%));
-    --gradient-card: linear-gradient(180deg, hsl(40 30% 98%), hsl(45 25% 96%));
-    --gradient-background: linear-gradient(180deg, hsl(38 20% 97%), hsl(45 15% 95%));
+    /* Taporuh Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(213 51% 24%), hsl(213 47% 33%));
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%), hsl(0 0% 95%));
+    --gradient-background: linear-gradient(180deg, hsl(213 51% 24%), hsl(213 47% 33%));
+    --gradient-sky: linear-gradient(135deg, hsl(213 40% 70%), hsl(213 47% 85%));
     
-    /* Spiritual glows */
-    --glow-primary: 0 0 30px hsl(38 65% 55% / 0.3);
-    --glow-soft: 0 0 20px hsl(35 70% 65% / 0.2);
+    /* Taporuh Glows */
+    --glow-primary: 0 0 30px hsl(45 70% 60% / 0.4);
+    --glow-soft: 0 0 20px hsl(213 40% 70% / 0.3);
     
-    /* Spiritual shadows */
-    --shadow-soft: 0 4px 20px hsl(25 15% 25% / 0.1);
-    --shadow-glow: 0 0 40px hsl(38 65% 55% / 0.15);
+    /* Taporuh Shadows */
+    --shadow-soft: 0 4px 20px hsl(213 51% 24% / 0.15);
+    --shadow-glow: 0 0 40px hsl(45 70% 60% / 0.25);
 
     --radius: 0.5rem;
 
@@ -70,47 +71,48 @@ All colors MUST be HSL.
   }
 
   .dark {
-    /* Dark spiritual theme */
-    --background: 25 20% 8%;   /* Deep warm black */
-    --foreground: 40 30% 92%;  /* Warm white */
+    /* Taporuh Dark Theme */
+    --background: 213 51% 8%;       /* Very dark blue */
+    --foreground: 0 0% 100%;        /* Pure white */
 
-    --card: 25 25% 12%;        /* Dark warm card */
-    --card-foreground: 40 30% 92%;
+    --card: 213 51% 12%;            /* Dark blue card */
+    --card-foreground: 0 0% 100%;
 
-    --popover: 25 25% 12%;
-    --popover-foreground: 40 30% 92%;
+    --popover: 213 51% 12%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 38 65% 55%;     /* Golden amber (same) */
-    --primary-foreground: 25 20% 8%;
+    --primary: 213 51% 24%;         /* Primary Deep Blue */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 25 30% 15%;   /* Dark warm secondary */
-    --secondary-foreground: 40 30% 92%;
+    --secondary: 213 47% 20%;       /* Darker secondary */
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 25 25% 18%;       /* Dark muted */
-    --muted-foreground: 45 15% 65%;
+    --muted: 213 51% 15%;           /* Dark muted */
+    --muted-foreground: 213 40% 70%;
 
-    --accent: 35 70% 65%;      /* Warm gold (same) */
-    --accent-foreground: 25 20% 8%;
+    --accent: 45 70% 60%;           /* Lotus Gold Accent */
+    --accent-foreground: 213 51% 8%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 25 25% 20%;      /* Dark warm border */
-    --input: 25 25% 15%;       /* Dark input */
-    --ring: 38 65% 55%;        /* Golden ring */
+    --border: 213 51% 20%;          /* Dark border */
+    --input: 213 51% 15%;           /* Dark input */
+    --ring: 45 70% 60%;             /* Lotus Gold ring */
 
-    /* Dark spiritual gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(38 65% 55%), hsl(35 70% 65%));
-    --gradient-card: linear-gradient(180deg, hsl(25 25% 12%), hsl(25 30% 10%));
-    --gradient-background: linear-gradient(180deg, hsl(25 20% 8%), hsl(25 25% 6%));
+    /* Dark Taporuh gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(213 51% 24%), hsl(213 47% 33%));
+    --gradient-card: linear-gradient(180deg, hsl(213 51% 12%), hsl(213 51% 10%));
+    --gradient-background: linear-gradient(180deg, hsl(213 51% 8%), hsl(213 51% 6%));
+    --gradient-sky: linear-gradient(135deg, hsl(213 40% 30%), hsl(213 47% 25%));
     
-    /* Dark spiritual glows */
-    --glow-primary: 0 0 40px hsl(38 65% 55% / 0.4);
-    --glow-soft: 0 0 30px hsl(35 70% 65% / 0.3);
+    /* Dark Taporuh glows */
+    --glow-primary: 0 0 40px hsl(45 70% 60% / 0.5);
+    --glow-soft: 0 0 30px hsl(213 40% 70% / 0.4);
     
-    /* Dark spiritual shadows */
-    --shadow-soft: 0 4px 20px hsl(0 0% 0% / 0.3);
-    --shadow-glow: 0 0 50px hsl(38 65% 55% / 0.2);
+    /* Dark Taporuh shadows */
+    --shadow-soft: 0 4px 20px hsl(0 0% 0% / 0.4);
+    --shadow-glow: 0 0 50px hsl(45 70% 60% / 0.3);
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;

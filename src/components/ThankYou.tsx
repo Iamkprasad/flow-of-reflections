@@ -10,24 +10,24 @@ const ThankYou = ({ onViewReflections, onStartOver }: ThankYouProps) => {
   return (
     <div className="max-w-2xl mx-auto text-center space-y-8 animate-fade-in-slow">
       <div className="animate-float">
-        <div className="w-20 h-20 mx-auto bg-gradient-primary rounded-full flex items-center justify-center shadow-glow mb-6">
-          <span className="text-3xl">✨</span>
+        <div className="w-20 h-20 mx-auto bg-accent/20 backdrop-blur-sm rounded-full flex items-center justify-center shadow-glow mb-6">
+          <span className="text-3xl text-accent">🪷</span>
         </div>
       </div>
       
-      <Card className="p-8 bg-gradient-card border-border/50 shadow-spiritual">
+      <Card className="p-8 bg-white/10 backdrop-blur-sm border-accent/30 shadow-spiritual">
         <div className="space-y-6">
-          <h2 className="font-cormorant text-3xl font-semibold text-foreground">
-            Your reflection has been received
+          <h2 className="font-playfair text-4xl font-semibold text-white">
+            Your sacred reflection has been received
           </h2>
           
           <div className="space-y-4">
-            <p className="font-inter text-lg text-muted-foreground leading-relaxed">
-              Thank you for sharing your light. Your words now join the collective wisdom 
-              of souls who have walked this path of reflection.
+            <p className="font-opensans text-lg text-blue-100 leading-relaxed">
+              Namaste. Your divine words now join the sacred wisdom 
+              of souls who have walked this path of spiritual awakening.
             </p>
             
-            <p className="font-inter text-sm text-muted-foreground italic">
+            <p className="font-opensans text-base text-accent italic">
               "When we share our inner truth, we illuminate the way for others to find theirs."
             </p>
           </div>
@@ -36,15 +36,15 @@ const ThankYou = ({ onViewReflections, onStartOver }: ThankYouProps) => {
             <Button
               onClick={onViewReflections}
               variant="outline"
-              className="flex-1 font-inter"
+              className="flex-1 font-opensans border-accent text-accent hover:bg-accent hover:text-primary"
             >
-              View All Reflections
+              View Sacred Reflections
             </Button>
             <Button
               onClick={onStartOver}
-              className="flex-1 bg-gradient-primary hover:shadow-glow transition-all duration-300 font-inter"
+              className="flex-1 bg-accent hover:bg-accent/90 text-primary hover:shadow-glow transition-all duration-300 font-opensans font-semibold"
             >
-              Begin Another Journey
+              Begin Another Sacred Journey
             </Button>
           </div>
         </div>

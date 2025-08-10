@@ -62,17 +62,17 @@ const ReflectionForm = ({ selectedArt, onSubmit, onBack }: ReflectionFormProps) 
   return (
     <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
       <div className="text-center space-y-4">
-        <h2 className="font-cormorant text-3xl font-semibold text-foreground">
-          What stirred within you?
+        <h2 className="font-playfair text-4xl font-semibold text-white">
+          What stirred within your soul?
         </h2>
-        <p className="font-inter text-muted-foreground max-w-md mx-auto">
-          Share your anonymous reflection. Your words might light the way for another soul.
+        <p className="font-opensans text-blue-200 text-lg max-w-md mx-auto">
+          Share your sacred reflection. Your words might illuminate the path for another seeker.
         </p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-8 items-start">
         {/* Selected Artwork */}
-        <Card className="overflow-hidden bg-gradient-card border-border/50 shadow-soft">
+        <Card className="overflow-hidden bg-white/10 backdrop-blur-sm border-accent/30 shadow-soft">
           <div className="aspect-square p-4">
             <img
               src={selectedArt.imageUrl}
@@ -81,7 +81,7 @@ const ReflectionForm = ({ selectedArt, onSubmit, onBack }: ReflectionFormProps) 
             />
           </div>
           <div className="p-4 text-center">
-            <h3 className="font-cormorant text-xl font-medium text-foreground">
+            <h3 className="font-playfair text-xl font-medium text-white">
               {selectedArt.title}
             </h3>
           </div>
@@ -89,26 +89,26 @@ const ReflectionForm = ({ selectedArt, onSubmit, onBack }: ReflectionFormProps) 
 
         {/* Reflection Form */}
         <div className="space-y-6">
-          <Card className="p-6 bg-gradient-card border-border/50 shadow-soft">
+          <Card className="p-6 bg-white/10 backdrop-blur-sm border-accent/30 shadow-soft">
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="font-inter text-sm font-medium text-foreground">
-                  Why did this speak to you?
+                <label className="font-opensans text-base font-medium text-white">
+                  Why did this speak to your soul?
                 </label>
-                <p className="font-inter text-xs text-muted-foreground">
-                  What emotion did it awaken? What memory or feeling arose?
+                <p className="font-opensans text-sm text-blue-200">
+                  What divine wisdom did it awaken? What sacred memory or feeling arose?
                 </p>
               </div>
               
               <Textarea
                 value={reflection}
                 onChange={(e) => setReflection(e.target.value)}
-                placeholder="Let your heart speak freely..."
-                className="min-h-[120px] resize-none bg-background/50 border-border/30 font-inter text-sm leading-relaxed focus:shadow-glow-soft transition-shadow duration-300"
+                placeholder="Let your soul speak its sacred truth..."
+                className="min-h-[120px] resize-none bg-white/5 border-accent/50 text-white font-opensans text-sm leading-relaxed focus:shadow-glow-soft focus:border-accent transition-all duration-300 placeholder:text-blue-300"
                 maxLength={500}
               />
               
-              <p className="font-inter text-xs text-muted-foreground text-right">
+              <p className="font-opensans text-xs text-blue-300 text-right">
                 {reflection.length}/500 characters
               </p>
             </div>
@@ -118,16 +118,16 @@ const ReflectionForm = ({ selectedArt, onSubmit, onBack }: ReflectionFormProps) 
             <Button
               variant="outline"
               onClick={onBack}
-              className="flex-1 font-inter"
+              className="flex-1 font-opensans border-accent text-accent hover:bg-accent hover:text-primary"
             >
               Choose Again
             </Button>
             <Button
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="flex-1 bg-gradient-primary hover:shadow-glow transition-all duration-300 font-inter"
+              className="flex-1 bg-accent hover:bg-accent/90 text-primary hover:shadow-glow transition-all duration-300 font-opensans font-semibold"
             >
-              {isSubmitting ? "Sharing..." : "Share Reflection"}
+              {isSubmitting ? "Sharing Sacred Words..." : "Share Sacred Reflection"}
             </Button>
           </div>
         </div>

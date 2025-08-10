@@ -18,17 +18,17 @@ const ArtReveal = ({ art, onStartReflection, onBack }: ArtRevealProps) => {
   return (
     <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
       <div className="text-center space-y-4">
-        <h2 className="font-cormorant text-3xl font-semibold text-foreground">
-          Your Spiritual Artwork
+        <h2 className="font-playfair text-4xl font-semibold text-white">
+          Your Sacred Artwork
         </h2>
-        <p className="font-inter text-muted-foreground max-w-md mx-auto">
+        <p className="font-opensans text-blue-200 text-lg max-w-md mx-auto">
           Allow this sacred creation to speak to your soul
         </p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-8 items-start">
         {/* Artwork Display */}
-        <Card className="overflow-hidden bg-gradient-card border-border/50 shadow-soft">
+        <Card className="overflow-hidden bg-white/10 backdrop-blur-sm border-accent/30 shadow-soft">
           <div className="aspect-square p-4">
             <img
               src={art.imageUrl}
@@ -37,7 +37,7 @@ const ArtReveal = ({ art, onStartReflection, onBack }: ArtRevealProps) => {
             />
           </div>
           <div className="p-4 text-center">
-            <h3 className="font-cormorant text-xl font-medium text-foreground">
+            <h3 className="font-playfair text-xl font-medium text-white">
               {art.title}
             </h3>
           </div>
@@ -45,12 +45,12 @@ const ArtReveal = ({ art, onStartReflection, onBack }: ArtRevealProps) => {
 
         {/* Description & Action */}
         <div className="space-y-6">
-          <Card className="p-6 bg-gradient-card border-border/50 shadow-soft">
+          <Card className="p-6 bg-white/10 backdrop-blur-sm border-accent/30 shadow-soft">
             <div className="space-y-4">
-              <h4 className="font-cormorant text-lg font-medium text-foreground">
-                Spiritual Meaning
+              <h4 className="font-playfair text-xl font-medium text-white">
+                Sacred Wisdom
               </h4>
-              <p className="font-inter text-sm text-muted-foreground leading-relaxed">
+              <p className="font-opensans text-blue-100 text-base leading-relaxed">
                 {art.description}
               </p>
             </div>
@@ -59,15 +59,15 @@ const ArtReveal = ({ art, onStartReflection, onBack }: ArtRevealProps) => {
           <div className="space-y-3">
             <Button
               onClick={onStartReflection}
-              className="w-full py-4 bg-gradient-primary hover:shadow-glow transition-all duration-300 font-inter"
+              className="w-full py-4 bg-accent hover:bg-accent/90 text-primary hover:shadow-glow transition-all duration-300 font-opensans font-semibold"
             >
-              Share Your Reflection
+              Share Your Sacred Reflection
             </Button>
             {onBack && (
               <Button
                 onClick={onBack}
                 variant="outline"
-                className="w-full font-inter"
+                className="w-full font-opensans border-accent text-accent hover:bg-accent hover:text-primary"
               >
                 Choose Again
               </Button>

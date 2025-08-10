@@ -1,0 +1,29 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Lotus petals -->
+  <g transform="translate(40,45)">
+    <!-- Center petal -->
+    <path d="M0,-15 Q-8,-25 -6,-35 Q0,-40 6,-35 Q8,-25 0,-15Z" fill="white" opacity="0.9"/>
+    
+    <!-- Left outer petal -->
+    <path d="M-8,-12 Q-18,-20 -20,-30 Q-15,-35 -8,-30 Q-5,-20 -8,-12Z" fill="white" opacity="0.8"/>
+    
+    <!-- Right outer petal -->
+    <path d="M8,-12 Q18,-20 20,-30 Q15,-35 8,-30 Q5,-20 8,-12Z" fill="white" opacity="0.8"/>
+    
+    <!-- Far left petal -->
+    <path d="M-15,-8 Q-25,-15 -30,-25 Q-25,-30 -18,-25 Q-12,-15 -15,-8Z" fill="white" opacity="0.7"/>
+    
+    <!-- Far right petal -->
+    <path d="M15,-8 Q25,-15 30,-25 Q25,-30 18,-25 Q12,-15 15,-8Z" fill="white" opacity="0.7"/>
+    
+    <!-- Bottom left petal -->
+    <path d="M-12,-5 Q-20,-10 -25,-18 Q-20,-23 -12,-18 Q-8,-10 -12,-5Z" fill="white" opacity="0.6"/>
+    
+    <!-- Bottom right petal -->
+    <path d="M12,-5 Q20,-10 25,-18 Q20,-23 12,-18 Q8,-10 12,-5Z" fill="white" opacity="0.6"/>
+  </g>
+  
+  <!-- Base/stem lines -->
+  <line x1="25" y1="50" x2="55" y2="50" stroke="white" stroke-width="2" opacity="0.8"/>
+  <line x1="30" y1="55" x2="50" y2="55" stroke="white" stroke-width="1.5" opacity="0.6"/>
+</svg>
