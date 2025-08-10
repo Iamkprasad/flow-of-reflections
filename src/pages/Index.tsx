@@ -7,6 +7,7 @@ import ArtworkSelection from "@/components/ArtworkSelection";
 import ReflectionForm from "@/components/ReflectionForm";
 import ThankYou from "@/components/ThankYou";
 import { useSpiritualArt } from "@/hooks/useSpiritualArt";
+import Navigation from "@/components/Navigation";
 
 interface SpiritualArt {
   id: string;
@@ -67,7 +68,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-background text-white">
-      <div className="container mx-auto px-4 py-12">
+      <Navigation />
+      
+      <div className="container mx-auto px-4 py-12 pt-24">
         {currentPage === "landing" && (
           <div className="max-w-3xl mx-auto text-center space-y-8 animate-fade-in">
             <div className="space-y-8">
