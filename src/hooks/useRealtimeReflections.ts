@@ -164,18 +164,46 @@ export const useRealtimeReflections = () => {
     }
   };
 
-  const incrementLikes = async (reflectionId: string) => {
+  const toggleLike = async (reflectionId: string) => {
     try {
-      const { data, error } = await supabase
-        .from('reflections')
-        .update({ 
-          likes: reflections.find(r => r.id === reflectionId)?.likes + 1 || 1 
-        })
-        .eq('id', reflectionId);
+      const { data, error } = await supabase.rpc('toggle_reflection_like', {
+        reflection_uuid: reflectionId
+      });
 
       if (error) throw error;
+      return { success: true, isLiked: data };
     } catch (error) {
-      console.error('Error incrementing likes:', error);
+      console.error('Error toggling like:', error);
+      return { success: false, error };
+    }
+  };
+
+  const getLikeCount = async (reflectionId: string) => {
+    try {
+      const { data, error } = await supabase.rpc('get_reflection_like_count', {
+        reflection_uuid: reflectionId
+      });
+
+      if (error) throw error;
+      return data || 0;
+    } catch (error) {
+      console.error('Error getting like count:', error);
+      return 0;
+    }
+  };
+
+  const hasUserLiked = async (reflectionId: string, userId: string) => {
+    try {
+      const { data, error } = await supabase.rpc('has_user_liked_reflection', {
+        reflection_uuid: reflectionId,
+        user_uuid: userId
+      });
+
+      if (error) throw error;
+      return data || false;
+    } catch (error) {
+      console.error('Error checking if user liked:', error);
+      return false;
     }
   };
 
@@ -205,7 +233,9 @@ export const useRealtimeReflections = () => {
     comments,
     loading,
     addReflection,
-    incrementLikes,
+    toggleLike,
+    getLikeCount,
+    hasUserLiked,
     addComment,
     getCommentsForReflection
   };

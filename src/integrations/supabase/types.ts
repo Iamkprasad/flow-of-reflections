@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.12 (cd3cf9e)"
@@ -76,6 +76,35 @@ export type Database = {
         }
         Relationships: []
       }
+      reflection_likes: {
+        Row: {
+          created_at: string
+          id: string
+          reflection_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          reflection_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          reflection_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reflection_likes_reflection_id_fkey"
+            columns: ["reflection_id"]
+            isOneToOne: false
+            referencedRelation: "reflections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reflections: {
         Row: {
           created_at: string
@@ -116,7 +145,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_reflection_like_count: {
+        Args: { reflection_uuid: string }
+        Returns: number
+      }
+      has_user_liked_reflection: {
+        Args: { reflection_uuid: string; user_uuid: string }
+        Returns: boolean
+      }
+      toggle_reflection_like: {
+        Args: { reflection_uuid: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

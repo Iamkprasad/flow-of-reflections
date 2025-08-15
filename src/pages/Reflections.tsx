@@ -1,6 +1,6 @@
-import { Card } from "@/components/ui/card";
 import Navigation from "@/components/Navigation";
 import { useRealtimeReflections } from "@/hooks/useRealtimeReflections";
+import ReflectionCard from "@/components/ReflectionCard";
 
 const Reflections = () => {
   const { reflections, loading } = useRealtimeReflections();
@@ -34,30 +34,10 @@ const Reflections = () => {
             ) : (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {reflections.map((reflection) => (
-                  <Card 
+                  <ReflectionCard 
                     key={reflection.id}
-                    className="p-6 bg-white/10 backdrop-blur-sm border-accent/30 hover:shadow-spiritual transition-all duration-500"
-                  >
-                    <div className="space-y-4">
-                      <p className="font-opensans text-blue-100 leading-relaxed text-sm">
-                        "{reflection.text}"
-                      </p>
-                      
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-blue-300 font-opensans">
-                          {new Date(reflection.created_at).toLocaleDateString('en-US', {
-                            month: 'short',
-                            day: 'numeric',
-                            year: 'numeric'
-                          })}
-                        </span>
-                        <div className="flex items-center space-x-1">
-                          <span className="text-accent">💫</span>
-                          <span className="text-blue-300 font-opensans">{reflection.likes}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </Card>
+                    reflection={reflection}
+                  />
                 ))}
               </div>
             )}
