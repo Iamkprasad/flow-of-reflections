@@ -1,31 +1,46 @@
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import Navigation from "@/components/Navigation";
 
 const Blog = () => {
-  // Placeholder blog posts
-  const blogPosts = [
-    {
-      id: 1,
-      title: "The Sacred Art of Inner Reflection",
-      excerpt: "Discover how spiritual artwork can unlock deeper understanding of your soul's journey...",
-      date: "January 15, 2025",
-      readTime: "5 min read"
-    },
-    {
-      id: 2,
-      title: "Manifesting Through Divine Creativity",
-      excerpt: "Learn how AI-generated spiritual art connects us to universal consciousness...",
-      date: "January 12, 2025",
-      readTime: "7 min read"
-    },
-    {
-      id: 3,
-      title: "The Lotus Path: Finding Peace in Digital Age",
-      excerpt: "Ancient wisdom meets modern technology in our quest for spiritual awakening...",
-      date: "January 10, 2025",
-      readTime: "6 min read"
-    }
-  ];
+  const [blogPosts, setBlogPosts] = useState([]);
+
+  useEffect(() => {
+    // Load blog posts from localStorage (where admin creates them)
+    const loadBlogPosts = () => {
+      const stored = localStorage.getItem('blog_posts');
+      if (stored) {
+        setBlogPosts(JSON.parse(stored));
+      } else {
+        // Fallback to default posts if none exist
+        setBlogPosts([
+          {
+            id: 1,
+            title: "The Sacred Art of Inner Reflection",
+            excerpt: "Discover how spiritual artwork can unlock deeper understanding of your soul's journey...",
+            date: "January 15, 2025",
+            readTime: "5 min read"
+          },
+          {
+            id: 2,
+            title: "Manifesting Through Divine Creativity",
+            excerpt: "Learn how AI-generated spiritual art connects us to universal consciousness...",
+            date: "January 12, 2025",
+            readTime: "7 min read"
+          },
+          {
+            id: 3,
+            title: "The Lotus Path: Finding Peace in Digital Age",
+            excerpt: "Ancient wisdom meets modern technology in our quest for spiritual awakening...",
+            date: "January 10, 2025",
+            readTime: "6 min read"
+          }
+        ]);
+      }
+    };
+
+    loadBlogPosts();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-background">

@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Reflections from "./pages/Reflections";
 import Blog from "./pages/Blog";
 import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/reflections" element={<Reflections />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/about" element={<About />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

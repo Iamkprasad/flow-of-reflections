@@ -1,4 +1,3 @@
-import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
@@ -67,15 +66,23 @@ serve(async (req) => {
     }
 
     const data = await response.json();
+    
+    if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
+      throw new Error('Invalid response from Gemini API');
+    }
+    
     const description = data.candidates[0].content.parts[0].text;
 
     // Use the generated description as a prompt for actual image generation
     const imageUrl = await generateActualImage(description);
+    
+    // Clean the title by removing special characters that might cause encoding issues
+    const cleanTitle = randomPrompt.split(',')[0].replace(/[^\x00-\x7F]/g, "").trim();
 
     return new Response(JSON.stringify({ 
-      description,
+      description: description.replace(/[^\x00-\x7F]/g, ""), // Remove non-ASCII characters
       imageUrl,
-      title: randomPrompt.split(',')[0] // Use first part as title
+      title: cleanTitle || "Sacred Artwork"
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
