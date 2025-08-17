@@ -71,18 +71,18 @@ serve(async (req) => {
       throw new Error('Invalid response from Gemini API');
     }
     
-    const description = data.candidates[0].content.parts[0].text;
+    const description = cleanText(data.candidates[0].content.parts[0].text);
 
     // Use the generated description as a prompt for actual image generation
-    const imageUrl = await generateActualImage(description);
+    const imageUrl = await generateActualImage(cleanText(description));
     
     // Clean the title by removing special characters that might cause encoding issues
-    const cleanTitle = randomPrompt.split(',')[0].replace(/[^\x00-\x7F]/g, "").trim();
+    const cleanTitle = randomPrompt.split(',')[0];
 
     return new Response(JSON.stringify({ 
-      description: description.replace(/[^\x00-\x7F]/g, ""), // Remove non-ASCII characters
+      description: cleanText(description),
       imageUrl,
-      title: cleanTitle || "Sacred Artwork"
+      title: cleanText(cleanTitle) || "Sacred Artwork"
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
@@ -95,59 +95,49 @@ serve(async (req) => {
   }
 });
 
+// Clean text function to remove problematic characters
+function cleanText(text: string): string {
+  return text
+    .replace(/[^\x00-\x7F]/g, "") // Remove non-ASCII characters
+    .replace(/[\u0000-\u001F\u007F-\u009F]/g, "") // Remove control characters
+    .trim();
+}
+
 async function generateActualImage(description: string): Promise<string> {
   try {
-    // Use Gemini's image generation capability with the description
-    const imagePrompt = `Create a beautiful spiritual artwork: ${description}. 
-    Style: ethereal, mystical, with soft lighting and peaceful colors.
-    Size: 768x768 pixels. High quality, serene, and inspiring.`;
-
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-thinking-exp-01-21:generateContent?key=${geminiApiKey}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [
-              {
-                text: imagePrompt
-              }
-            ]
-          }
-        ],
-        generationConfig: {
-          temperature: 0.7,
-          responseModalities: ['TEXT', 'IMAGE']
-        }
-      }),
-    });
-
-    if (!response.ok) {
-      console.error('Gemini image generation failed, using fallback');
-      return generateSpiritualArtwork(description);
-    }
-
-    const data = await response.json();
+    // Use HuggingFace FLUX model for reliable image generation
+    const HF_TOKEN = Deno.env.get('HUGGING_FACE_ACCESS_TOKEN');
     
-    // Check if we have image data
-    if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-      const parts = data.candidates[0].content.parts;
-      
-      for (const part of parts) {
-        if (part.inlineData && part.inlineData.mimeType && part.inlineData.data) {
-          // Return the base64 image
-          return `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+    if (HF_TOKEN) {
+      const response = await fetch(
+        "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell",
+        {
+          headers: {
+            Authorization: `Bearer ${HF_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify({
+            inputs: `Beautiful spiritual artwork: ${description.substring(0, 200)}. Ethereal, mystical, peaceful, high quality, 768x768`,
+          }),
         }
+      );
+
+      if (response.ok) {
+        const imageBlob = await response.blob();
+        const arrayBuffer = await imageBlob.arrayBuffer();
+        const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+        return `data:image/png;base64,${base64}`;
+      } else {
+        console.log('HuggingFace API failed, using fallback SVG');
       }
     }
 
-    // Fallback if no image generated
+    // Fallback to SVG if HuggingFace fails or token not available
     return generateSpiritualArtwork(description);
     
   } catch (error) {
-    console.error('Error generating image with Gemini:', error);
+    console.error('Error generating image:', error);
     return generateSpiritualArtwork(description);
   }
 }
