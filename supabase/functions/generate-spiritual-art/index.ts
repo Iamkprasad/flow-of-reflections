@@ -1,7 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
-
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -14,75 +12,30 @@ serve(async (req) => {
 
   try {
     const spiritualPrompts = [
-      "A luminous tree of life with golden leaves floating in a cosmic void, representing the interconnectedness of all souls",
-      "A meditating figure dissolving into starlight beside a tranquil lake that reflects infinite galaxies",
-      "Ancient lotus flowers blooming through cracks in weathered stone, symbolizing resilience and spiritual awakening",
-      "A spiral pathway of light ascending through layers of ethereal clouds toward a radiant source",
-      "Hands releasing a flock of luminous birds that transform into constellation patterns in a twilight sky",
-      "A serene mountain peak where earth meets heaven, with streams of light flowing down like waterfalls of wisdom",
-      "A mandala garden where each petal contains a different scene of spiritual transformation and inner peace",
-      "Two souls connected by threads of golden light across a bridge of rainbow colors spanning an endless chasm"
+      "A luminous tree of life with golden leaves floating in a cosmic void",
+      "A meditating figure dissolving into starlight beside a tranquil lake",
+      "Ancient lotus flowers blooming through cracks in weathered stone",
+      "A spiral pathway of light ascending through layers of ethereal clouds",
+      "Hands releasing luminous birds that transform into constellation patterns",
+      "A serene mountain peak where earth meets heaven with streams of light",
+      "A mandala garden where each petal contains scenes of spiritual transformation",
+      "Two souls connected by threads of golden light across a rainbow bridge"
     ];
 
     const randomPrompt = spiritualPrompts[Math.floor(Math.random() * spiritualPrompts.length)];
     
-    const fullPrompt = `Create a detailed description of a spiritual painting: ${randomPrompt}. 
+    // Generate image using HuggingFace
+    const imageUrl = await generateImage(randomPrompt);
     
-    Describe the artwork in vivid detail, including:
-    - Visual elements and composition
-    - Color palette and lighting
-    - Symbolic meaning and spiritual significance
-    - The emotional atmosphere it evokes
-    - How it might inspire reflection on inner growth, forgiveness, or enlightenment
+    // Simple, clean description
+    const description = `A beautiful spiritual artwork depicting ${randomPrompt.toLowerCase()}. This sacred image invites contemplation and inner reflection, representing the eternal journey of the soul toward enlightenment.`;
     
-    Write this as if describing an actual painting that exists, with rich artistic and spiritual language.`;
-
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [
-              {
-                text: fullPrompt
-              }
-            ]
-          }
-        ],
-        generationConfig: {
-          temperature: 0.9,
-          topK: 1,
-          topP: 1,
-          maxOutputTokens: 2048,
-        }
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Gemini API error: ${response.status}`);
-    }
-
-    const data = await response.json();
-    
-    if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
-      throw new Error('Invalid response from Gemini API');
-    }
-    
-    const description = cleanText(data.candidates[0].content.parts[0].text);
-
-    // Use the generated description as a prompt for actual image generation
-    const imageUrl = await generateActualImage(cleanText(description));
-    
-    // Clean the title by removing special characters that might cause encoding issues
-    const cleanTitle = randomPrompt.split(',')[0];
+    const title = randomPrompt.substring(0, 50) + "...";
 
     return new Response(JSON.stringify({ 
-      description: cleanText(description),
-      imageUrl,
-      title: cleanText(cleanTitle) || "Sacred Artwork"
+      description: description,
+      imageUrl: imageUrl,
+      title: title
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
@@ -95,20 +48,13 @@ serve(async (req) => {
   }
 });
 
-// Clean text function to remove problematic characters
-function cleanText(text: string): string {
-  return text
-    .replace(/[^\x00-\x7F]/g, "") // Remove non-ASCII characters
-    .replace(/[\u0000-\u001F\u007F-\u009F]/g, "") // Remove control characters
-    .trim();
-}
-
-async function generateActualImage(description: string): Promise<string> {
+async function generateImage(prompt: string): Promise<string> {
   try {
-    // Use HuggingFace FLUX model for reliable image generation
+    // Use HuggingFace FLUX model
     const HF_TOKEN = Deno.env.get('HUGGING_FACE_ACCESS_TOKEN');
     
     if (HF_TOKEN) {
+      console.log('Using HuggingFace for image generation');
       const response = await fetch(
         "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell",
         {
@@ -118,38 +64,42 @@ async function generateActualImage(description: string): Promise<string> {
           },
           method: "POST",
           body: JSON.stringify({
-            inputs: `Beautiful spiritual artwork: ${description.substring(0, 200)}. Ethereal, mystical, peaceful, high quality, 768x768`,
+            inputs: `Beautiful spiritual artwork: ${prompt}. Ethereal, mystical, peaceful, high quality, detailed, 768x768`,
           }),
         }
       );
 
       if (response.ok) {
+        console.log('HuggingFace API success');
         const imageBlob = await response.blob();
         const arrayBuffer = await imageBlob.arrayBuffer();
         const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
         return `data:image/png;base64,${base64}`;
       } else {
-        console.log('HuggingFace API failed, using fallback SVG');
+        const errorText = await response.text();
+        console.log('HuggingFace API failed:', response.status, errorText);
       }
+    } else {
+      console.log('No HuggingFace token found');
     }
 
-    // Fallback to SVG if HuggingFace fails or token not available
-    return generateSpiritualArtwork(description);
+    // Fallback to SVG
+    return generateSVGImage(prompt);
     
   } catch (error) {
     console.error('Error generating image:', error);
-    return generateSpiritualArtwork(description);
+    return generateSVGImage(prompt);
   }
 }
 
-function generateSpiritualArtwork(prompt: string): string {
-  // Create a more beautiful spiritual artwork as data URL
-  const canvas = `<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+function generateSVGImage(prompt: string): string {
+  // Generate a beautiful SVG based on prompt
+  const canvas = `<svg width="768" height="768" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <radialGradient id="spiritual" cx="50%" cy="50%">
+      <radialGradient id="spiritual" cx="50%" cy="30%">
         <stop offset="0%" style="stop-color:#ffd700;stop-opacity:0.9" />
         <stop offset="30%" style="stop-color:#ff6b9d;stop-opacity:0.7" />
-        <stop offset="60%" style="stop-color:#9370db;stop-opacity:0.6" />
+        <stop offset="70%" style="stop-color:#9370db;stop-opacity:0.6" />
         <stop offset="100%" style="stop-color:#1e3a5f;stop-opacity:0.9" />
       </radialGradient>
       <linearGradient id="lotus" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -157,7 +107,7 @@ function generateSpiritualArtwork(prompt: string): string {
         <stop offset="100%" style="stop-color:#ff6b9d;stop-opacity:0.6" />
       </linearGradient>
       <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+        <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
         <feMerge> 
           <feMergeNode in="coloredBlur"/>
           <feMergeNode in="SourceGraphic"/>
@@ -168,44 +118,46 @@ function generateSpiritualArtwork(prompt: string): string {
     <!-- Background -->
     <rect width="100%" height="100%" fill="url(#spiritual)"/>
     
-    <!-- Sacred geometry -->
-    <circle cx="256" cy="256" r="150" fill="none" stroke="#ffd700" stroke-width="2" opacity="0.5" filter="url(#glow)"/>
-    <circle cx="256" cy="256" r="120" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.4"/>
-    <circle cx="256" cy="256" r="90" fill="none" stroke="#ff6b9d" stroke-width="1.5" opacity="0.6"/>
+    <!-- Sacred geometry circles -->
+    <circle cx="384" cy="384" r="250" fill="none" stroke="#ffd700" stroke-width="3" opacity="0.6" filter="url(#glow)"/>
+    <circle cx="384" cy="384" r="200" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.5"/>
+    <circle cx="384" cy="384" r="150" fill="none" stroke="#ff6b9d" stroke-width="2" opacity="0.7"/>
     
-    <!-- Lotus center -->
-    <circle cx="256" cy="256" r="40" fill="url(#lotus)" opacity="0.8" filter="url(#glow)"/>
+    <!-- Central lotus -->
+    <circle cx="384" cy="384" r="80" fill="url(#lotus)" opacity="0.8" filter="url(#glow)"/>
     
     <!-- Lotus petals -->
-    <g transform="translate(256,256)" opacity="0.7">
-      <!-- Outer petals -->
-      <ellipse cx="0" cy="-60" rx="15" ry="40" fill="#ffd700" opacity="0.6" filter="url(#glow)"/>
-      <ellipse cx="42" cy="-42" rx="15" ry="40" fill="#ff6b9d" opacity="0.6" transform="rotate(45)" filter="url(#glow)"/>
-      <ellipse cx="60" cy="0" rx="15" ry="40" fill="#ffd700" opacity="0.6" transform="rotate(90)" filter="url(#glow)"/>
-      <ellipse cx="42" cy="42" rx="15" ry="40" fill="#ff6b9d" opacity="0.6" transform="rotate(135)" filter="url(#glow)"/>
-      <ellipse cx="0" cy="60" rx="15" ry="40" fill="#ffd700" opacity="0.6" transform="rotate(180)" filter="url(#glow)"/>
-      <ellipse cx="-42" cy="42" rx="15" ry="40" fill="#ff6b9d" opacity="0.6" transform="rotate(225)" filter="url(#glow)"/>
-      <ellipse cx="-60" cy="0" rx="15" ry="40" fill="#ffd700" opacity="0.6" transform="rotate(270)" filter="url(#glow)"/>
-      <ellipse cx="-42" cy="-42" rx="15" ry="40" fill="#ff6b9d" opacity="0.6" transform="rotate(315)" filter="url(#glow)"/>
+    <g transform="translate(384,384)" opacity="0.8">
+      <ellipse cx="0" cy="-100" rx="25" ry="60" fill="#ffd700" opacity="0.7" filter="url(#glow)"/>
+      <ellipse cx="70" cy="-70" rx="25" ry="60" fill="#ff6b9d" opacity="0.7" transform="rotate(45)" filter="url(#glow)"/>
+      <ellipse cx="100" cy="0" rx="25" ry="60" fill="#ffd700" opacity="0.7" transform="rotate(90)" filter="url(#glow)"/>
+      <ellipse cx="70" cy="70" rx="25" ry="60" fill="#ff6b9d" opacity="0.7" transform="rotate(135)" filter="url(#glow)"/>
+      <ellipse cx="0" cy="100" rx="25" ry="60" fill="#ffd700" opacity="0.7" transform="rotate(180)" filter="url(#glow)"/>
+      <ellipse cx="-70" cy="70" rx="25" ry="60" fill="#ff6b9d" opacity="0.7" transform="rotate(225)" filter="url(#glow)"/>
+      <ellipse cx="-100" cy="0" rx="25" ry="60" fill="#ffd700" opacity="0.7" transform="rotate(270)" filter="url(#glow)"/>
+      <ellipse cx="-70" cy="-70" rx="25" ry="60" fill="#ff6b9d" opacity="0.7" transform="rotate(315)" filter="url(#glow)"/>
     </g>
     
     <!-- Inner light -->
-    <circle cx="256" cy="256" r="20" fill="#ffffff" opacity="0.9" filter="url(#glow)"/>
+    <circle cx="384" cy="384" r="40" fill="#ffffff" opacity="0.9" filter="url(#glow)"/>
     
-    <!-- Floating particles -->
-    <circle cx="180" cy="150" r="3" fill="#ffd700" opacity="0.8" filter="url(#glow)">
+    <!-- Floating light particles -->
+    <circle cx="250" cy="250" r="5" fill="#ffd700" opacity="0.8" filter="url(#glow)">
       <animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite"/>
     </circle>
-    <circle cx="350" cy="200" r="2" fill="#ff6b9d" opacity="0.7" filter="url(#glow)">
+    <circle cx="550" cy="300" r="4" fill="#ff6b9d" opacity="0.7" filter="url(#glow)">
       <animate attributeName="opacity" values="0.4;0.9;0.4" dur="4s" repeatCount="indefinite"/>
     </circle>
-    <circle cx="200" cy="380" r="2.5" fill="#9370db" opacity="0.6" filter="url(#glow)">
+    <circle cx="300" cy="550" r="4.5" fill="#9370db" opacity="0.6" filter="url(#glow)">
       <animate attributeName="opacity" values="0.2;0.8;0.2" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="500" cy="200" r="3.5" fill="#ffffff" opacity="0.8" filter="url(#glow)">
+      <animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" repeatCount="indefinite"/>
     </circle>
     
     <!-- Sacred text -->
-    <text x="256" y="480" text-anchor="middle" fill="#ffffff" font-family="serif" font-size="16" opacity="0.9" font-style="italic">
-      ✨ Sacred Art ✨
+    <text x="384" y="700" text-anchor="middle" fill="#ffffff" font-family="serif" font-size="28" opacity="0.9" font-style="italic">
+      Sacred Art
     </text>
   </svg>`;
   
