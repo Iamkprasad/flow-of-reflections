@@ -6,6 +6,7 @@ const Navigation = () => {
 
   const navLinks = [
     { path: "/", label: "Journey", icon: "🪷" },
+    { path: "/quotes", label: "Sacred Quotes", icon: "🌟" },
     { path: "/reflections", label: "Sacred Reflections", icon: "📿" },
     { path: "/blog", label: "Wisdom", icon: "📜" },
     { path: "/about", label: "About", icon: "✨" },
@@ -17,11 +18,9 @@ const Navigation = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
-            <img 
-              src="/src/assets/taporuh-logo.svg" 
-              alt="Taporuh" 
-              className="h-8 w-8 group-hover:scale-110 transition-transform duration-300"
-            />
+            <div className="h-8 w-8 rounded-full bg-gradient-spiritual flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <span className="text-white font-bold text-xs">T</span>
+            </div>
             <span className="font-playfair text-2xl font-bold text-white">
               Taporuh
             </span>

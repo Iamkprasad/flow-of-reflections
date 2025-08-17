@@ -96,9 +96,60 @@ serve(async (req) => {
 });
 
 async function generateActualImage(description: string): Promise<string> {
-  // For now, return a beautiful SVG-based spiritual artwork
-  // Later this can be replaced with actual AI image generation
-  return generateSpiritualArtwork(description);
+  try {
+    // Use Gemini's image generation capability with the description
+    const imagePrompt = `Create a beautiful spiritual artwork: ${description}. 
+    Style: ethereal, mystical, with soft lighting and peaceful colors.
+    Size: 768x768 pixels. High quality, serene, and inspiring.`;
+
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-thinking-exp-01-21:generateContent?key=${geminiApiKey}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [
+              {
+                text: imagePrompt
+              }
+            ]
+          }
+        ],
+        generationConfig: {
+          temperature: 0.7,
+          responseModalities: ['TEXT', 'IMAGE']
+        }
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('Gemini image generation failed, using fallback');
+      return generateSpiritualArtwork(description);
+    }
+
+    const data = await response.json();
+    
+    // Check if we have image data
+    if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+      const parts = data.candidates[0].content.parts;
+      
+      for (const part of parts) {
+        if (part.inlineData && part.inlineData.mimeType && part.inlineData.data) {
+          // Return the base64 image
+          return `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+        }
+      }
+    }
+
+    // Fallback if no image generated
+    return generateSpiritualArtwork(description);
+    
+  } catch (error) {
+    console.error('Error generating image with Gemini:', error);
+    return generateSpiritualArtwork(description);
+  }
 }
 
 function generateSpiritualArtwork(prompt: string): string {
