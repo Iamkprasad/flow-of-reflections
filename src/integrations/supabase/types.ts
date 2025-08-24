@@ -107,26 +107,32 @@ export type Database = {
       }
       reflections: {
         Row: {
+          author_name: string | null
           created_at: string
           id: string
           likes: number
           post_id: string
+          spiritual_art_id: string | null
           text: string
           updated_at: string
         }
         Insert: {
+          author_name?: string | null
           created_at?: string
           id?: string
           likes?: number
           post_id: string
+          spiritual_art_id?: string | null
           text: string
           updated_at?: string
         }
         Update: {
+          author_name?: string | null
           created_at?: string
           id?: string
           likes?: number
           post_id?: string
+          spiritual_art_id?: string | null
           text?: string
           updated_at?: string
         }
@@ -138,7 +144,47 @@ export type Database = {
             referencedRelation: "posts"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "reflections_spiritual_art_id_fkey"
+            columns: ["spiritual_art_id"]
+            isOneToOne: false
+            referencedRelation: "spiritual_art"
+            referencedColumns: ["id"]
+          },
         ]
+      }
+      spiritual_art: {
+        Row: {
+          created_at: string
+          description: string
+          divine_message: string
+          id: string
+          image_url: string
+          prompt_used: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          divine_message: string
+          id?: string
+          image_url: string
+          prompt_used?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          divine_message?: string
+          id?: string
+          image_url?: string
+          prompt_used?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
     }
     Views: {
