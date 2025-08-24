@@ -215,6 +215,7 @@ export const useSpiritualArtReflections = () => {
       const { error } = await supabase
         .from('reflections')
         .insert({
+          post_id: null, // Set to null when using spiritual art
           spiritual_art_id: spiritualArtId,
           text: text,
           author_name: authorName

@@ -111,7 +111,7 @@ export type Database = {
           created_at: string
           id: string
           likes: number
-          post_id: string
+          post_id: string | null
           spiritual_art_id: string | null
           text: string
           updated_at: string
@@ -121,7 +121,7 @@ export type Database = {
           created_at?: string
           id?: string
           likes?: number
-          post_id: string
+          post_id?: string | null
           spiritual_art_id?: string | null
           text: string
           updated_at?: string
@@ -131,7 +131,7 @@ export type Database = {
           created_at?: string
           id?: string
           likes?: number
-          post_id?: string
+          post_id?: string | null
           spiritual_art_id?: string | null
           text?: string
           updated_at?: string

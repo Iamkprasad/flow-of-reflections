@@ -8,6 +8,7 @@ const Navigation = () => {
     { path: "/", label: "Journey", icon: "🪷" },
     { path: "/quotes", label: "Sacred Quotes", icon: "🌟" },
     { path: "/reflections", label: "Sacred Reflections", icon: "📿" },
+    { path: "/gallery", label: "Gallery", icon: "🎨" },
     { path: "/blog", label: "Wisdom", icon: "📜" },
     { path: "/about", label: "About", icon: "✨" },
   ];

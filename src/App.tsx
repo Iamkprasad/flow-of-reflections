@@ -11,6 +11,7 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
+import SpiritualGallery from "./components/SpiritualGallery";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/quotes" element={<Quotes />} />
           <Route path="/reflections" element={<Reflections />} />
+          <Route path="/gallery" element={<SpiritualGallery />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
