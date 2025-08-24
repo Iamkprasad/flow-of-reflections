@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { useRealtimeReflections } from "@/hooks/useRealtimeReflections";
+import { useSpiritualArtReflections } from "@/hooks/useSpiritualArtReflections";
 
 interface SpiritualArt {
   id: string;
@@ -20,9 +21,10 @@ interface ReflectionFormProps {
 
 const ReflectionForm = ({ selectedArt, onSubmit, onBack }: ReflectionFormProps) => {
   const [reflection, setReflection] = useState("");
+  const [authorName, setAuthorName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const { addReflection } = useRealtimeReflections();
+  const { addReflection, saveSpiritualArt } = useSpiritualArtReflections();
 
   const handleSubmit = async () => {
     if (!reflection.trim()) {
@@ -34,21 +36,49 @@ const ReflectionForm = ({ selectedArt, onSubmit, onBack }: ReflectionFormProps) 
       return;
     }
 
+    if (!authorName.trim()) {
+      toast({
+        title: "Please enter your name",
+        description: "Let others know who shared this beautiful reflection.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
-      const result = await addReflection(selectedArt.id, reflection.trim());
+      // First, save the spiritual art to the database
+      const artResult = await saveSpiritualArt({
+        title: selectedArt.title,
+        description: selectedArt.description,
+        divine_message: selectedArt.description, // Using description as divine message for now
+        image_url: selectedArt.imageUrl,
+        prompt_used: "AI Generated Spiritual Art"
+      });
+
+      if (!artResult.success) {
+        throw new Error("Failed to save spiritual art");
+      }
+
+      // Then, add the reflection linked to the spiritual art
+      const reflectionResult = await addReflection(
+        artResult.data.id, 
+        reflection.trim(), 
+        authorName.trim()
+      );
       
-      if (result.success) {
+      if (reflectionResult.success) {
         toast({
-          title: "Reflection shared",
-          description: "Your reflection has been shared with the community.",
+          title: "Sacred reflection shared",
+          description: "Your reflection has been added to our spiritual gallery.",
         });
         onSubmit();
       } else {
         throw new Error("Failed to save reflection");
       }
     } catch (error) {
+      console.error('Reflection submission error:', error);
       toast({
         title: "Error sharing reflection",
         description: "Please try again later.",
@@ -90,7 +120,20 @@ const ReflectionForm = ({ selectedArt, onSubmit, onBack }: ReflectionFormProps) 
         {/* Reflection Form */}
         <div className="space-y-6">
           <Card className="p-6 bg-white/10 backdrop-blur-sm border-accent/30 shadow-soft">
-            <div className="space-y-4">
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <label className="font-opensans text-base font-medium text-white">
+                  Your Sacred Name
+                </label>
+                <Input
+                  value={authorName}
+                  onChange={(e) => setAuthorName(e.target.value)}
+                  placeholder="How shall we honor your reflection?"
+                  className="bg-white/5 border-accent/50 text-white font-opensans focus:shadow-glow-soft focus:border-accent transition-all duration-300 placeholder:text-blue-300"
+                  maxLength={50}
+                />
+              </div>
+              
               <div className="space-y-2">
                 <label className="font-opensans text-base font-medium text-white">
                   Why did this speak to your soul?
