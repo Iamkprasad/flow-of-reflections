@@ -72,6 +72,7 @@ export default {
 				'gradient-card': 'var(--gradient-card)',
 				'gradient-background': 'var(--gradient-background)',
 				'gradient-sky': 'var(--gradient-sky)',
+				'gradient-spiritual': 'linear-gradient(135deg, hsl(45 70% 60%), hsl(213 47% 33%))',
 			},
 			boxShadow: {
 				'glow': 'var(--glow-primary)',
