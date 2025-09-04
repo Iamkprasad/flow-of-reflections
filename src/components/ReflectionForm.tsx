@@ -90,17 +90,17 @@ const ReflectionForm = ({ selectedArt, onSubmit, onBack }: ReflectionFormProps) 
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
+    <div className="max-w-4xl mx-auto space-y-6 md:space-y-8 animate-fade-in px-4">
       <div className="text-center space-y-4">
-        <h2 className="font-playfair text-4xl font-semibold text-white">
+        <h2 className="font-playfair text-3xl md:text-4xl font-semibold text-white">
           What stirred within your soul?
         </h2>
-        <p className="font-opensans text-blue-200 text-lg max-w-md mx-auto">
+        <p className="font-opensans text-blue-200 text-base md:text-lg max-w-md mx-auto">
           Share your sacred reflection. Your words might illuminate the path for another seeker.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-start">
         {/* Selected Artwork */}
         <Card className="overflow-hidden bg-white/10 backdrop-blur-sm border-accent/30 shadow-soft">
           <div className="aspect-square p-4">
@@ -108,37 +108,41 @@ const ReflectionForm = ({ selectedArt, onSubmit, onBack }: ReflectionFormProps) 
               src={selectedArt.imageUrl}
               alt={selectedArt.title}
               className="w-full h-full object-contain rounded-lg"
+              onError={(e) => {
+                console.error('Image failed to load:', selectedArt.imageUrl);
+                e.currentTarget.src = 'data:image/svg+xml;base64,' + btoa('<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="400" fill="#1a365d"/><text x="200" y="200" text-anchor="middle" fill="#ffd700" font-size="24">🪷 Sacred Art</text></svg>');
+              }}
             />
           </div>
           <div className="p-4 text-center">
-            <h3 className="font-playfair text-xl font-medium text-white">
+            <h3 className="font-playfair text-lg md:text-xl font-medium text-white">
               {selectedArt.title}
             </h3>
           </div>
         </Card>
 
         {/* Reflection Form */}
-        <div className="space-y-6">
-          <Card className="p-6 bg-white/10 backdrop-blur-sm border-accent/30 shadow-soft">
-            <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
+          <Card className="p-4 md:p-6 bg-white/10 backdrop-blur-sm border-accent/30 shadow-soft">
+            <div className="space-y-4 md:space-y-6">
               <div className="space-y-2">
-                <label className="font-opensans text-base font-medium text-white">
+                <label className="font-opensans text-sm md:text-base font-medium text-white">
                   Your Sacred Name
                 </label>
                 <Input
                   value={authorName}
                   onChange={(e) => setAuthorName(e.target.value)}
                   placeholder="How shall we honor your reflection?"
-                  className="bg-white/5 border-accent/50 text-white font-opensans focus:shadow-glow-soft focus:border-accent transition-all duration-300 placeholder:text-blue-300"
+                  className="bg-white/5 border-accent/50 text-white font-opensans text-sm md:text-base focus:shadow-glow-soft focus:border-accent transition-all duration-300 placeholder:text-blue-300"
                   maxLength={50}
                 />
               </div>
               
               <div className="space-y-2">
-                <label className="font-opensans text-base font-medium text-white">
+                <label className="font-opensans text-sm md:text-base font-medium text-white">
                   Why did this speak to your soul?
                 </label>
-                <p className="font-opensans text-sm text-blue-200">
+                <p className="font-opensans text-xs md:text-sm text-blue-200">
                   What divine wisdom did it awaken? What sacred memory or feeling arose?
                 </p>
               </div>
@@ -147,7 +151,7 @@ const ReflectionForm = ({ selectedArt, onSubmit, onBack }: ReflectionFormProps) 
                 value={reflection}
                 onChange={(e) => setReflection(e.target.value)}
                 placeholder="Let your soul speak its sacred truth..."
-                className="min-h-[120px] resize-none bg-white/5 border-accent/50 text-white font-opensans text-sm leading-relaxed focus:shadow-glow-soft focus:border-accent transition-all duration-300 placeholder:text-blue-300"
+                className="min-h-[100px] md:min-h-[120px] resize-none bg-white/5 border-accent/50 text-white font-opensans text-sm leading-relaxed focus:shadow-glow-soft focus:border-accent transition-all duration-300 placeholder:text-blue-300"
                 maxLength={500}
               />
               
@@ -157,20 +161,20 @@ const ReflectionForm = ({ selectedArt, onSubmit, onBack }: ReflectionFormProps) 
             </div>
           </Card>
 
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
             <Button
               variant="outline"
               onClick={onBack}
-              className="flex-1 font-opensans border-accent text-accent hover:bg-accent hover:text-primary"
+              className="flex-1 py-2 md:py-3 font-opensans border-accent text-accent hover:bg-accent hover:text-primary text-sm md:text-base"
             >
               Choose Again
             </Button>
             <Button
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="flex-1 bg-accent hover:bg-accent/90 text-primary hover:shadow-glow transition-all duration-300 font-opensans font-semibold"
+              className="flex-1 py-3 md:py-3 bg-accent hover:bg-accent/90 text-primary hover:shadow-glow transition-all duration-300 font-opensans font-semibold text-sm md:text-base"
             >
-              {isSubmitting ? "Sharing Sacred Words..." : "Share Sacred Reflection"}
+              {isSubmitting ? "Sharing..." : "Share Sacred Reflection"}
             </Button>
           </div>
         </div>

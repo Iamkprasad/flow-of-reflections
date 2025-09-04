@@ -70,33 +70,33 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-background text-white">
       <Navigation />
       
-      <div className="container mx-auto px-4 py-12 pt-24">
+      <div className="container mx-auto px-4 py-6 md:py-12 pt-20 md:pt-24">
         {currentPage === "landing" && (
-          <div className="max-w-3xl mx-auto text-center space-y-8 animate-fade-in">
-            <div className="space-y-8">
-              <div className="flex justify-center mb-8">
+          <div className="max-w-3xl mx-auto text-center space-y-6 md:space-y-8 animate-fade-in">
+            <div className="space-y-6 md:space-y-8">
+              <div className="flex justify-center mb-6 md:mb-8">
                 <img 
-                  src="/src/assets/taporuh-logo.svg" 
+                  src="/taporuh-logo.svg" 
                   alt="Taporuh - Spiritual Sanctuary" 
-                  className="h-20 w-20 animate-float"
+                  className="h-16 w-16 md:h-20 md:w-20 animate-float"
                 />
               </div>
-              <h1 className="font-playfair text-6xl font-bold text-white leading-tight">
+              <h1 className="font-playfair text-4xl md:text-6xl font-bold text-white leading-tight">
                 Taporuh
               </h1>
-              <p className="font-opensans text-xl text-blue-200 leading-relaxed">
+              <p className="font-opensans text-lg md:text-xl text-blue-200 leading-relaxed px-4">
                 Awaken your soul through words, images, and experiences
               </p>
-              <p className="font-opensans text-lg text-blue-100 leading-relaxed max-w-2xl mx-auto">
+              <p className="font-opensans text-base md:text-lg text-blue-100 leading-relaxed max-w-2xl mx-auto px-4">
                 Embark on a journey of inner discovery through AI-generated spiritual artwork.
                 Each piece is uniquely created to inspire reflection and connection.
               </p>
             </div>
             
-            <Card className="p-8 bg-white/10 backdrop-blur-sm border-accent/30 shadow-spiritual">
+            <Card className="p-6 md:p-8 bg-white/10 backdrop-blur-sm border-accent/30 shadow-spiritual mx-4 md:mx-0">
               <Button
                 onClick={handleBeginJourney}
-                className="w-full py-6 text-xl bg-accent hover:bg-accent/90 text-primary hover:shadow-glow transition-all duration-300 font-opensans font-semibold"
+                className="w-full py-4 md:py-6 text-lg md:text-xl bg-accent hover:bg-accent/90 text-primary hover:shadow-glow transition-all duration-300 font-opensans font-semibold"
                 disabled={isGenerating}
               >
                 Begin Your Spiritual Journey
@@ -106,16 +106,16 @@ const Index = () => {
         )}
         
         {currentPage === "generating" && (
-          <div className="max-w-2xl mx-auto text-center space-y-8 animate-fade-in">
+          <div className="max-w-2xl mx-auto text-center space-y-6 md:space-y-8 animate-fade-in px-4">
             <div className="animate-float">
-              <div className="w-20 h-20 mx-auto bg-accent/20 backdrop-blur-sm rounded-full flex items-center justify-center shadow-glow mb-6">
-                <span className="text-3xl text-accent animate-pulse">🪷</span>
+              <div className="w-16 h-16 md:w-20 md:h-20 mx-auto bg-accent/20 backdrop-blur-sm rounded-full flex items-center justify-center shadow-glow mb-6">
+                <span className="text-2xl md:text-3xl text-accent animate-pulse">🪷</span>
               </div>
             </div>
-            <h2 className="font-playfair text-4xl font-semibold text-white">
+            <h2 className="font-playfair text-3xl md:text-4xl font-semibold text-white">
               Your sacred artwork is manifesting...
             </h2>
-            <p className="font-opensans text-blue-200 text-lg">
+            <p className="font-opensans text-blue-200 text-base md:text-lg">
               The universe is creating something beautiful just for your soul
             </p>
           </div>
