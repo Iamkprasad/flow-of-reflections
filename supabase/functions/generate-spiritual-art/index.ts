@@ -93,37 +93,45 @@ serve(async (req) => {
 
 async function generateImage(prompt: string): Promise<string> {
   try {
-    // Use HuggingFace FLUX model
-    const HF_TOKEN = Deno.env.get('HUGGING_FACE_ACCESS_TOKEN');
+    const NVIDIA_API_KEY = Deno.env.get('NVIDIA_API_KEY');
     
-    if (HF_TOKEN) {
-      console.log('Using HuggingFace for image generation');
+    if (NVIDIA_API_KEY) {
+      console.log('Using NVIDIA Stable Diffusion XL for image generation');
       const response = await fetch(
-        "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell",
+        "https://integrate.api.nvidia.com/v1/stabilityai/stable-diffusion-xl",
         {
+          method: "POST",
           headers: {
-            Authorization: `Bearer ${HF_TOKEN}`,
+            Authorization: `Bearer ${NVIDIA_API_KEY}`,
             "Content-Type": "application/json",
           },
-          method: "POST",
           body: JSON.stringify({
-            inputs: `Beautiful spiritual artwork: ${prompt}. Ethereal, mystical, peaceful, high quality, detailed, 768x768`,
+            text_prompts: [
+              {
+                text: `Beautiful spiritual artwork: ${prompt}. Ethereal, mystical, peaceful, sacred, highly detailed, masterpiece quality`,
+                weight: 1
+              }
+            ],
+            height: 1024,
+            width: 1024,
+            cfg_scale: 7,
+            steps: 30,
+            sampler: "K_DPM_2_ANCESTRAL"
           }),
         }
       );
 
       if (response.ok) {
-        console.log('HuggingFace API success');
-        const imageBlob = await response.blob();
-        const arrayBuffer = await imageBlob.arrayBuffer();
-        const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
-        return `data:image/png;base64,${base64}`;
+        console.log('NVIDIA Stable Diffusion XL API success');
+        const data = await response.json();
+        const base64Image = data.artifacts[0].base64;
+        return `data:image/jpeg;base64,${base64Image}`;
       } else {
         const errorText = await response.text();
-        console.log('HuggingFace API failed:', response.status, errorText);
+        console.log('NVIDIA Stable Diffusion XL API failed:', response.status, errorText);
       }
     } else {
-      console.log('No HuggingFace token found');
+      console.log('No NVIDIA API key found');
     }
 
     // Fallback to SVG

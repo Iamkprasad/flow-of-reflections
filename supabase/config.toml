@@ -2,8 +2,8 @@ project_id = "eflqniojksdfnvasdffb"
 
 [functions.generate-spiritual-art]
 verify_jwt = false
-environment = { NVIDIA_API_KEY = "NVIDIA_API_KEY", HUGGING_FACE_ACCESS_TOKEN = "HUGGING_FACE_ACCESS_TOKEN" }
+environment = { NVIDIA_API_KEY = "NVIDIA_API_KEY" }
 
 [functions.generate-spiritual-quote]
 verify_jwt = false
-environment = { NVIDIA_API_KEY = "NVIDIA_API_KEY", HUGGING_FACE_ACCESS_TOKEN = "HUGGING_FACE_ACCESS_TOKEN" }
+environment = { NVIDIA_API_KEY = "NVIDIA_API_KEY" }
