@@ -11,26 +11,69 @@ serve(async (req) => {
   }
 
   try {
-    const spiritualPrompts = [
-      "A luminous tree of life with golden leaves floating in a cosmic void",
-      "A meditating figure dissolving into starlight beside a tranquil lake",
-      "Ancient lotus flowers blooming through cracks in weathered stone",
-      "A spiral pathway of light ascending through layers of ethereal clouds",
-      "Hands releasing luminous birds that transform into constellation patterns",
-      "A serene mountain peak where earth meets heaven with streams of light",
-      "A mandala garden where each petal contains scenes of spiritual transformation",
-      "Two souls connected by threads of golden light across a rainbow bridge"
+    const spiritualThemes = [
+      "divine consciousness and inner awakening",
+      "unity of all beings in cosmic love",
+      "the eternal dance of creation and dissolution",
+      "sacred geometry and universal harmony",
+      "transcendental meditation and enlightenment",
+      "the journey from darkness to light"
     ];
 
-    const randomPrompt = spiritualPrompts[Math.floor(Math.random() * spiritualPrompts.length)];
+    const randomTheme = spiritualThemes[Math.floor(Math.random() * spiritualThemes.length)];
+    
+    console.log('Generating spiritual artwork prompt with NVIDIA API...');
+    const NVIDIA_API_KEY = Deno.env.get('NVIDIA_API_KEY');
+    
+    if (!NVIDIA_API_KEY) {
+      throw new Error('NVIDIA_API_KEY is not configured');
+    }
+
+    // Generate creative prompt using NVIDIA API
+    const nvidiaResponse = await fetch(
+      'https://integrate.api.nvidia.com/v1/chat/completions',
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${NVIDIA_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'qwen/qwen3-coder-480b-a35b-instruct',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are a spiritual art director. Create vivid, mystical descriptions for spiritual artwork. Be poetic and detailed.'
+            },
+            {
+              role: 'user',
+              content: `Create a detailed visual description for a spiritual artwork about "${randomTheme}". Include colors, symbols, and ethereal elements. Keep it to 2-3 sentences, suitable for image generation.`
+            }
+          ],
+          temperature: 0.8,
+          max_tokens: 200
+        })
+      }
+    );
+
+    if (!nvidiaResponse.ok) {
+      const errorText = await nvidiaResponse.text();
+      console.error('NVIDIA API error:', nvidiaResponse.status, errorText);
+      throw new Error(`NVIDIA API error: ${nvidiaResponse.status}`);
+    }
+
+    const nvidiaData = await nvidiaResponse.json();
+    const generatedPrompt = nvidiaData.choices[0].message.content.trim();
+    
+    console.log('Generated prompt:', generatedPrompt);
     
     // Generate image using HuggingFace
-    const imageUrl = await generateImage(randomPrompt);
+    const imageUrl = await generateImage(generatedPrompt);
     
-    // Simple, clean description
-    const description = `A beautiful spiritual artwork depicting ${randomPrompt.toLowerCase()}. This sacred image invites contemplation and inner reflection, representing the eternal journey of the soul toward enlightenment.`;
+    // Create description
+    const description = `A beautiful spiritual artwork depicting ${randomTheme}. ${generatedPrompt}`;
     
-    const title = randomPrompt.substring(0, 50) + "...";
+    const title = randomTheme.charAt(0).toUpperCase() + randomTheme.slice(0, 47) + "...";
 
     return new Response(JSON.stringify({ 
       description: description,

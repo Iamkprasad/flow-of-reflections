@@ -1,7 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
-
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -44,42 +42,51 @@ serve(async (req) => {
     AUTHOR: [author name]
     IMAGE_DESCRIPTION: [detailed artwork description for image generation]`;
 
-    // Generate quote with text
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`, {
+    console.log('Calling NVIDIA API...');
+    const NVIDIA_API_KEY = Deno.env.get('NVIDIA_API_KEY');
+    
+    if (!NVIDIA_API_KEY) {
+      throw new Error('NVIDIA_API_KEY is not configured');
+    }
+
+    // Generate quote with NVIDIA API
+    const response = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${NVIDIA_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        contents: [
+        model: 'qwen/qwen3-coder-480b-a35b-instruct',
+        messages: [
           {
-            parts: [
-              {
-                text: quotePrompt
-              }
-            ]
+            role: 'system',
+            content: 'You are a spiritual wisdom keeper who creates profound quotes. Follow the user format exactly.'
+          },
+          {
+            role: 'user',
+            content: quotePrompt
           }
         ],
-        generationConfig: {
-          temperature: 0.9,
-          topK: 1,
-          topP: 1,
-          maxOutputTokens: 2048,
-        }
+        temperature: 0.7,
+        max_tokens: 500
       }),
     });
 
     if (!response.ok) {
-      throw new Error(`Gemini API error: ${response.status}`);
+      const errorText = await response.text();
+      console.error('NVIDIA API error:', response.status, errorText);
+      throw new Error(`NVIDIA API error: ${response.status}`);
     }
 
     const data = await response.json();
+    console.log('NVIDIA response received');
     
-    if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
-      throw new Error('Invalid response from Gemini API');
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      throw new Error('Invalid response from NVIDIA API');
     }
     
-    const content = cleanText(data.candidates[0].content.parts[0].text);
+    const content = cleanText(data.choices[0].message.content);
 
     // Parse the response
     const quoteMatch = content.match(/QUOTE:\s*(.*)/);
